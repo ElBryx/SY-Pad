@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syensqo | Digital Forest</title>
+    <style>
+        body {
+            background: url('https://i.imgur.com/Nv9TedS.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .thumbnail-container {
+            position: absolute;
+            cursor: pointer;
+            border: 2px solid #fff;
+            border-radius: 3.4vw;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            transition: transform 1s ease, border-radius 1s ease;
+        }
+
+        .thumbnail-container.top-left {
+            top: 16.6%;
+            left: 3.75%;
+            width: 30.9%;
+            height: 30.55%;
+        }
+
+        .thumbnail-container.top-right {
+            top: 41%;
+            right: 3.75%;
+            width: 30.9%;
+            height: 30.9%;
+        }
+
+        .thumbnail-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-player {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.8);
+            transition: transform 1s ease;
+        }
+
+        .video-player iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .fullscreen {
+            transform: scale(1.5);
+        }
+
+        .shrink {
+            transform: scale(0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="thumbnail-container top-left" onclick="playVideo('JG8N0KzB4a8')">
+        <img src="https://img.youtube.com/vi/JG8N0KzB4a8/0.jpg" alt="Video 1 Thumbnail">
+    </div>
+    <div class="thumbnail-container top-right" onclick="playVideo('myRsfAFyKBg')">
+        <img src="https://img.youtube.com/vi/myRsfAFyKBg/0.jpg" alt="Video 2 Thumbnail">
+    </div>
+    <div id="video-player" class="video-player">
+        <div id="video-frame"></div>
+    </div>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        var player;
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('video-frame', {
+                events: {
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.ENDED) {
+                location.reload();
+            }
+        }
+
+        function requestFullscreen(element) {
+            const requestFullScreen = element.requestFullscreen || element.mozRequestFullScreen || element.webkitRequestFullscreen || element.msRequestFullscreen;
+            if (requestFullScreen) {
+                requestFullScreen.call(element);
+            }
+        }
+
+        function exitFullscreen() {
+            const exitFullScreen = document.exitFullscreen || document.mozCancelFullScreen || document.webkitExitFullscreen || document.msExitFullscreen;
+            if (exitFullScreen) {
+                exitFullScreen.call(document);
+            }
+        }
+
+        function playVideo(videoId) {
+            const videoPlayer = document.getElementById('video-player');
+            videoPlayer.style.display = 'block';
+            document.querySelectorAll('.thumbnail-container').forEach(element => {
+                element.style.display = 'none';
+            });
+
+            player.loadVideoById(videoId);
+            player.setPlaybackQuality('hd1080');
+            player.playVideo();
+            requestFullscreen(videoPlayer);
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            requestFullscreen(document.documentElement);
+        });
+    </script>
+</body>
+</html>
